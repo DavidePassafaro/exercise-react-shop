@@ -1,10 +1,24 @@
+import { ServerError, Spinner } from "@shared/components";
+import { Product } from "@shared/models";
 import { useProductsService } from "@shared/services";
+import { useEffect } from "react";
+import { CMSProductsForm } from "./components/CMSProductForm";
+import { CMSProductsList } from "./components/CMSProductsList";
 
 export function CMSProductsPage() {
-  const { state, actions } = useProductsService();
+  const {
+    state: { pending, error, products, activeItem },
+    actions,
+  } = useProductsService();
 
-  function getProductsHandler() {
+  useEffect(() => {
     actions.getProducts();
+  }, []);
+
+  function onSave(product: Product) {
+    if (activeItem?.id) actions.editProduct(product);
+    else actions.addProduct(product);
+    actions.resetActiveItem();
   }
 
   return (
@@ -13,15 +27,31 @@ export function CMSProductsPage() {
 
       <hr className="my-8" />
 
-      {state.pending && <div>loading</div>}
+      {pending && <Spinner />}
 
-      {state.error && <div>{state.error}</div>}
+      {error && <ServerError>{error}</ServerError>}
 
-      <button className="btn primary" onClick={getProductsHandler}>
-        Get Products
-      </button>
+      <CMSProductsForm
+        activeItem={activeItem}
+        onSave={onSave}
+        onClose={actions.resetActiveItem}
+      />
 
-      <pre>{JSON.stringify(state, null, 2)}</pre>
+      <CMSProductsList
+        products={products}
+        activeItem={activeItem}
+        onSelectItem={actions.setActiveItem}
+        onDeleteItem={actions.deleteProduct}
+      />
+
+      <div className="mt-8">
+        <button
+          className="btn primary"
+          onClick={() => actions.setActiveItem({})}
+        >
+          ADD NEW
+        </button>
+      </div>
     </div>
   );
 }

@@ -46,7 +46,7 @@ export function useProductsService() {
     }
   }
 
-  function setActiveItem(product: Product | null) {
+  function setActiveItem(product: Partial<Product> | null) {
     dispatch({ type: "productSetActive", payload: product });
   }
 

@@ -9,15 +9,15 @@ export function ProductCard({
   product,
   onAddToCart = () => {},
 }: ComponentProps) {
-  const { id, name, cost, description, tmb }: Product = product;
+  const { id, name, cost, description, img }: Product = product;
 
   return (
     <li
       key={id}
       className="flex flex-col bg-white text-black rounded-xl shadow-2xl overflow-hidden"
     >
-      {tmb && (
-        <img src={tmb} alt={name} className="h-64 w-full object-contain" />
+      {img && (
+        <img src={img} alt={name} className="h-64 w-full object-contain" />
       )}
 
       <div className="flex justify-between items-center p-3 text-xl font-bold">

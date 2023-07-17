@@ -33,14 +33,14 @@ export function CartPage() {
         : [
             <ul>
               {list.map(
-                ({ qty, product: { id, name, cost, tmb } }: CartItem) => (
+                ({ qty, product: { id, name, cost, img } }: CartItem) => (
                   <li
                     key={id}
                     className="flex flex-col sm:flex-row justify-between items-center gap-3 my-3 border-b border-blue-400 py-3"
                   >
                     <div className="flex flex-col sm:flex-row items-center gap-3">
-                      {tmb && (
-                        <img src={tmb} alt={name} className="w-24 rounded-xl" />
+                      {img && (
+                        <img src={img} alt={name} className="w-24 rounded-xl" />
                       )}
                       <div className="font-bold">{name}</div>
                     </div>

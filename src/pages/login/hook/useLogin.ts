@@ -5,7 +5,7 @@ import {
   selectLogin,
   useAuth,
 } from "@shared/services";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 
 const TEST_USER: User = { username: "test@test.com", password: "Test01!!!!" };
@@ -22,7 +22,6 @@ export function useLogin() {
 
   useEffect(() => {
     if (isUserLogged) navigate("/cms");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUserLogged]);
 
   function changeHandler({ currentTarget }: ChangeEvent<HTMLInputElement>) {
@@ -30,7 +29,7 @@ export function useLogin() {
     setDirty(true);
   }
 
-  function submitHandler(event: React.FormEvent<HTMLFormElement>) {
+  function submitHandler(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     login(user);
   }

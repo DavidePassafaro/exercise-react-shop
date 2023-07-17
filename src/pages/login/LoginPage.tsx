@@ -11,8 +11,8 @@ export function LoginPage() {
 
       <form className="flex flex-col gap-3" onSubmit={actions.submitHandler}>
         <input
-          className={clsx({ error: !validators.isUsernameValid })}
           type="text"
+          className={clsx({ error: !validators.isUsernameValid })}
           placeholder="Insert your username"
           name="username"
           value={user.username}
@@ -21,8 +21,8 @@ export function LoginPage() {
         />
 
         <input
-          className={clsx({ error: !validators.isPasswordValid })}
           type="password"
+          className={clsx({ error: !validators.isPasswordValid })}
           placeholder="Insert password"
           name="password"
           value={user.password}
@@ -31,8 +31,8 @@ export function LoginPage() {
         />
 
         <button
-          className="btn primary"
           type="submit"
+          className="btn primary"
           disabled={!validators.isFormValid}
         >
           SIGN IN

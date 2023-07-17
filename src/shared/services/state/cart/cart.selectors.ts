@@ -19,3 +19,5 @@ export const selectTotalCartCost = ({ list }: CartState) =>
     (acc, { qty, product: { cost } }: CartItem) => acc + qty * cost,
     0
   );
+
+export const selectAddToCart = ({ addToCart }: CartState) => addToCart;
