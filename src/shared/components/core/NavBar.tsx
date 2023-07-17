@@ -1,6 +1,8 @@
 import logo from "@assets/react.svg";
-import { NavLinkClassName } from "@shared/models";
+import { NavLinkClassName, Product } from "@shared/models";
+import { useCartPanel } from "@shared/services";
 import { NavLink } from "react-router-dom";
+import { CartPanel } from "./CartPanel";
 
 interface NavBarLink {
   description: string;
@@ -19,6 +21,9 @@ const isBottomButtonActive = ({ isActive }: NavLinkClassName) =>
   "btn accent lg" + (isActive ? " border-4 border-yellow-300" : "");
 
 export function NavBar() {
+  const isCartOpen: boolean = useCartPanel((state) => state.open);
+  const toggleCartPanel: () => void = useCartPanel((state) => state.toggle);
+
   return (
     <div className="fixed top-0 left-0 right-0 shadow-2xl z-10">
       <div className="bg-slate-900 flex justify-between items-center h-20 text-white p-3">
@@ -33,8 +38,25 @@ export function NavBar() {
 
         {/* Cart */}
         <div>
-          <button className="btn accent lg">Cart: 0</button>
+          <button className="btn accent lg" onClick={toggleCartPanel}>
+            Cart: 0
+          </button>
         </div>
+
+        {isCartOpen && (
+          <CartPanel
+            productsOrderList={[
+              {
+                quantity: 4,
+                product: { id: "1", name: "Nutella", cost: 4 } as Product,
+              },
+              {
+                quantity: 5,
+                product: { id: "2", name: "Oreo", cost: 2 } as Product,
+              },
+            ]}
+          />
+        )}
 
         {/* Bottom Bar */}
         <div className="fixed bottom-2 right-2 p-5">
