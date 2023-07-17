@@ -8,6 +8,7 @@ export interface CartState {
   increaseQty: (productId: string) => void;
   decreaseQty: (productId: string) => void;
   clearCart: () => void;
+  editProduct: (product: Product) => void;
 }
 
 export const useCart = create<CartState>((set, get) => {
@@ -48,6 +49,14 @@ export const useCart = create<CartState>((set, get) => {
         list[index].qty--;
         set({ list: [...list] });
       }
+    },
+    editProduct: (product: Product) => {
+      const index: number = findProductIndexById(product.id);
+      if (index === -1) return;
+
+      const list: CartItem[] = get().list;
+      list[index].product = product;
+      set({ list: [...list] });
     },
     clearCart: () => set({ list: [] }),
   };

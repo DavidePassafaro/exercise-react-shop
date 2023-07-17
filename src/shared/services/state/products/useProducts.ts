@@ -1,10 +1,13 @@
 import { NewProduct, Product } from "@shared/models";
 import { useReducer } from "react";
 import * as ProductsApi from "../../api/products.api";
+import { selectEditProduct } from "../cart/cart.selectors";
+import { useCart } from "../cart/useCart";
 import { productsInitialState, productsReducer } from "./products.reducer";
 
 export function useProductsService() {
   const [state, dispatch] = useReducer(productsReducer, productsInitialState);
+  const editCartProduct = useCart(selectEditProduct);
 
   async function getProducts() {
     dispatch({ type: "pending", payload: true });
@@ -41,6 +44,7 @@ export function useProductsService() {
     try {
       const product: Product = await ProductsApi.edit(editedProduct);
       dispatch({ type: "productEditSuccess", payload: product });
+      editCartProduct(product);
     } catch (error) {
       dispatch({ type: "error", payload: "Products not edited" });
     }

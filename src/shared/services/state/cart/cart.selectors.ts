@@ -21,3 +21,5 @@ export const selectTotalCartCost = ({ list }: CartState) =>
   );
 
 export const selectAddToCart = ({ addToCart }: CartState) => addToCart;
+
+export const selectEditProduct = ({ editProduct }: CartState) => editProduct;
