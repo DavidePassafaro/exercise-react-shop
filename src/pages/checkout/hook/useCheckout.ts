@@ -4,6 +4,7 @@ import {
   selectClearCart,
   selectTotalCartCost,
   useCart,
+  useOrdersService,
 } from "@shared/services";
 import { ChangeEvent, useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
@@ -13,11 +14,15 @@ const EMAIL_REGEX: RegExp =
 
 export function useCheckout() {
   const navigate: NavigateFunction = useNavigate();
-  const [user, setUser] = useState<OrderUser>({ name: "", email: "" });
+  const [user, setUser] = useState<OrderUser>({
+    name: "Mario Biondi",
+    email: "marion.biondi@test.com",
+  });
   const [dirty, setDirty] = useState<boolean>(false);
   const totalCartCost: number = useCart(selectTotalCartCost);
   const order: CartItem[] = useCart(selectCartList);
   const clearCart: () => void = useCart(selectClearCart);
+  const { state: ordersState, actions } = useOrdersService();
 
   function changeHandler({ currentTarget }: ChangeEvent<HTMLInputElement>) {
     setUser((user) => ({ ...user, [currentTarget.name]: currentTarget.value }));
@@ -28,9 +33,14 @@ export function useCheckout() {
     event.preventDefault();
     const status: OrderStatus = OrderStatus.Pending;
     const orderInfo: OrderForm = { user, order, status, total: totalCartCost };
-    console.log(orderInfo);
-    clearCart();
-    navigate("/thankyou");
+
+    actions
+      .addOrder(orderInfo)
+      .then(() => {
+        clearCart();
+        navigate("/thankyou");
+      })
+      .catch(console.error);
   }
 
   const isNameValid: boolean = !dirty || !!user.name.length;
@@ -42,5 +52,6 @@ export function useCheckout() {
     totalCartCost,
     validators: { isNameValid, isEmailValid, isValid },
     actions: { changeHandler, submitHandler },
+    error: ordersState.error,
   };
 }

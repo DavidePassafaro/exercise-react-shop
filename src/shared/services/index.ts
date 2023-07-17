@@ -5,4 +5,5 @@ export * from "./state/cart-panel/cart-panel.selectors";
 export * from "./state/cart-panel/useCartPanel";
 export * from "./state/cart/cart.selectors";
 export * from "./state/cart/useCart";
+export * from "./state/orders/useOrders";
 export * from "./state/products/useProducts";

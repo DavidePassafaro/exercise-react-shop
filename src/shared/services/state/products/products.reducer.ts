@@ -2,17 +2,17 @@ import { Product } from "@shared/models";
 import { ProductsAction } from "./products.actions";
 
 export interface ProductsState {
-  pending: boolean;
   products: Product[];
-  error: string | null;
   activeItem: Partial<Product> | null;
+  pending: boolean;
+  error: string | null;
 }
 
 export const productsInitialState: ProductsState = {
-  pending: false,
   products: [],
-  error: null,
   activeItem: null,
+  pending: false,
+  error: null,
 };
 
 export function productsReducer(
@@ -20,28 +20,25 @@ export function productsReducer(
   { type, payload }: ProductsAction
 ) {
   switch (type) {
-    case "pending":
-      return { ...state, pending: payload, error: null };
-
     case "productsGetSuccess":
-      return { ...state, pending: false, products: payload, error: null };
+      return { ...state, products: payload, pending: false, error: null };
 
     case "productDeleteSuccess":
       return {
         ...state,
-        pending: false,
         products: [...state.products.filter(({ id }) => id !== payload)],
-        error: null,
         activeItem: state.activeItem?.id === payload ? null : state.activeItem,
+        pending: false,
+        error: null,
       };
 
     case "productAddSuccess":
       return {
         ...state,
-        pending: false,
         products: [...state.products, payload],
-        error: null,
         activeItem: null,
+        pending: false,
+        error: null,
       };
 
     case "productEditSuccess": {
@@ -50,14 +47,17 @@ export function productsReducer(
       if (index !== -1) products.splice(index, 1, payload);
       return {
         ...state,
-        pending: false,
         products,
+        pending: false,
         error: null,
       };
     }
 
     case "productSetActive":
       return { ...state, activeItem: payload };
+
+    case "pending":
+      return { ...state, pending: payload, error: null };
 
     case "error":
       return { ...state, pending: false, error: payload };

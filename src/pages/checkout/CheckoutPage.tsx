@@ -1,8 +1,9 @@
+import { ServerError } from "@shared/components";
 import clsx from "clsx";
 import { useCheckout } from "./hook/useCheckout";
 
 export function CheckoutPage() {
-  const { user, totalCartCost, validators, actions } = useCheckout();
+  const { user, totalCartCost, validators, actions, error } = useCheckout();
 
   return (
     <div className="max-w-sm mx-auto">
@@ -13,6 +14,8 @@ export function CheckoutPage() {
 
         <div>€ {totalCartCost}</div>
       </div>
+
+      {error && <ServerError>{error}</ServerError>}
 
       <form className="flex flex-col gap-3" onSubmit={actions.submitHandler}>
         {"Your name:"}

@@ -1,3 +1,4 @@
+import { PocketBaseBase } from "..";
 import { CartItem } from "./cart-item.model";
 
 export interface OrderUser {
@@ -16,3 +17,5 @@ export interface OrderForm {
   status: OrderStatus;
   total: number;
 }
+
+export type Order = PocketBaseBase & OrderForm;

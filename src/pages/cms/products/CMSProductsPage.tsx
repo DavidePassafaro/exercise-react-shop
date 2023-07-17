@@ -6,17 +6,14 @@ import { CMSProductsForm } from "./components/CMSProductForm";
 import { CMSProductsList } from "./components/CMSProductsList";
 
 export function CMSProductsPage() {
-  const {
-    state: { pending, error, products, activeItem },
-    actions,
-  } = useProductsService();
+  const { state, actions } = useProductsService();
 
   useEffect(() => {
     actions.getProducts();
   }, []);
 
   function onSave(product: Product) {
-    if (activeItem?.id) actions.editProduct(product);
+    if (state.activeItem?.id) actions.editProduct(product);
     else actions.addProduct(product);
     actions.resetActiveItem();
   }
@@ -27,19 +24,19 @@ export function CMSProductsPage() {
 
       <hr className="my-8" />
 
-      {pending && <Spinner />}
+      {state.pending && <Spinner />}
 
-      {error && <ServerError>{error}</ServerError>}
+      {state.error && <ServerError>{state.error}</ServerError>}
 
       <CMSProductsForm
-        activeItem={activeItem}
+        activeItem={state.activeItem}
         onSave={onSave}
         onClose={actions.resetActiveItem}
       />
 
       <CMSProductsList
-        products={products}
-        activeItem={activeItem}
+        products={state.products}
+        activeItem={state.activeItem}
         onSelectItem={actions.setActiveItem}
         onDeleteItem={actions.deleteProduct}
       />
