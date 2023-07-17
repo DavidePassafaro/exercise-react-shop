@@ -1,6 +1,6 @@
 import { User } from "@shared/models";
-import * as AuthService from "@shared/services/api/auth.api";
 import { create } from "zustand";
+import * as AuthApi from "../../api/auth.api";
 
 export interface AuthState {
   token: string | null;
@@ -12,22 +12,22 @@ export interface AuthState {
 
 export const useAuth = create<AuthState>((set) => {
   return {
-    token: AuthService.getToken(),
-    isLogged: AuthService.isLogged(),
+    token: AuthApi.getToken(),
+    isLogged: AuthApi.isLogged(),
     error: null,
     login: (user: User) => {
       set({ isLogged: false, error: null });
 
-      return AuthService.login(user)
+      return AuthApi.login(user)
         .then(() =>
-          set({ token: AuthService.getToken(), isLogged: true, error: null })
+          set({ token: AuthApi.getToken(), isLogged: true, error: null })
         )
         .catch(() =>
           set({ token: null, isLogged: false, error: "User does not exist!!!" })
         );
     },
     logout: () => {
-      AuthService.logout();
+      AuthApi.logout();
       set({ token: null, isLogged: false, error: null });
     },
   };

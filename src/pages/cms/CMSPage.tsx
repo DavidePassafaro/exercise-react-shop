@@ -11,10 +11,11 @@ const CMS_NAVBAR_LINKS: CMSNavBarLink[] = [
   { description: "Orders", to: "/cms/orders" },
 ];
 
-const isActive = ({ isActive }: NavLinkClassName) =>
-  "btn" + (isActive ? " primary" : "");
-
 export function CMSPage() {
+  function isActive({ isActive }: NavLinkClassName) {
+    return "btn" + (isActive ? " primary" : "");
+  }
+
   return (
     <div>
       {CMS_NAVBAR_LINKS.map(

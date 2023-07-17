@@ -7,3 +7,5 @@ export interface Product extends PocketBaseBase {
   tmb?: string;
   img?: string;
 }
+
+export type NewProduct = Omit<Product, keyof PocketBaseBase>;
