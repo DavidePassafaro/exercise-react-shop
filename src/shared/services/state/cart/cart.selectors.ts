@@ -1,5 +1,5 @@
 import { CartItem } from "@shared/models";
-import { CartState } from "..";
+import { CartState } from "./useCart";
 
 export const selectCartList = ({ list }: CartState) => list;
 

@@ -3,35 +3,37 @@ import { NavLinkClassName } from "@shared/models";
 import {
   selectCartIsEmpty,
   selectCartProductsQuantity,
+  selectLogout,
   selectOpen,
   selectToggle,
+  useAuth,
   useCart,
   useCartPanel,
 } from "@shared/services";
-import { NavLink } from "react-router-dom";
+import { NavLink, NavigateFunction, useNavigate } from "react-router-dom";
+import { IfLogged } from "../auth/IfLogged";
 import { CartPanel } from "./CartPanel";
 
-interface NavBarLink {
-  description: string;
-  to: string;
-}
-
-const BOTTOM_BAR_LINKS: NavBarLink[] = [
-  { description: "Login", to: "login" },
-  { description: "CMS", to: "cms" },
-];
-
-const isMainButtonActive = ({ isActive }: NavLinkClassName) =>
-  "text-xl" + (isActive ? " text-sky-400 font-bold" : "");
-
-const isBottomButtonActive = ({ isActive }: NavLinkClassName) =>
-  "btn accent lg" + (isActive ? " border-4 border-yellow-300" : "");
-
 export function NavBar() {
+  const navigate: NavigateFunction = useNavigate();
   const isCartOpen: boolean = useCartPanel(selectOpen);
   const toggleCartPanel: () => void = useCartPanel(selectToggle);
   const cartProductsQuantity: number = useCart(selectCartProductsQuantity);
   const isEmpty: boolean = useCart(selectCartIsEmpty);
+  const logout: () => void = useAuth(selectLogout);
+
+  function isMainButtonActive({ isActive }: NavLinkClassName) {
+    return "text-xl" + (isActive ? " text-sky-400 font-bold" : "");
+  }
+
+  function isBottomButtonActive({ isActive }: NavLinkClassName) {
+    return "btn accent lg" + (isActive ? " border-4 border-yellow-300" : "");
+  }
+
+  function logoutHandler() {
+    logout();
+    navigate("/login");
+  }
 
   return (
     <div className="fixed top-0 left-0 right-0 shadow-2xl z-10">
@@ -59,16 +61,22 @@ export function NavBar() {
         {isCartOpen && <CartPanel />}
 
         {/* Bottom Bar */}
-        <div className="fixed bottom-2 right-2 p-5">
-          {BOTTOM_BAR_LINKS.map(
-            ({ description, to }: NavBarLink, index: number) => (
-              <NavLink key={index} className={isBottomButtonActive} to={to}>
-                {description}
-              </NavLink>
-            )
-          )}
+        <div className="flex fixed bottom-2 right-2 p-5">
+          <NavLink className={isBottomButtonActive} to="cms">
+            CMS
+          </NavLink>
 
-          <button className="btn primary lg">Logout</button>
+          <IfLogged
+            elseNode={
+              <NavLink className={isBottomButtonActive} to="login">
+                Login
+              </NavLink>
+            }
+          >
+            <button className="btn primary lg" onClick={logoutHandler}>
+              Logout
+            </button>
+          </IfLogged>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { CartPanelState } from "..";
+import { CartPanelState } from "./useCartPanel";
 
 export const selectOpen = ({ open }: CartPanelState) => open;
 

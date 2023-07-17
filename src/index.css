@@ -44,7 +44,7 @@ input[type="password"].error {
 /* Buttons */
 
 .btn {
-  @apply px-5 py-2 rounded-full m-1 font-bold text-sm text-center disabled:opacity-30 transition;
+  @apply inline-flex justify-center items-center px-5 py-2 rounded-full m-1 font-bold text-sm text-center disabled:opacity-30 transition;
 }
 
 .btn.dark {

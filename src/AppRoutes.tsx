@@ -1,3 +1,4 @@
+import { IfLogged } from "@shared/components";
 import { Navigate, useRoutes } from "react-router-dom";
 import {
   CMSOrdersPage,
@@ -19,7 +20,11 @@ function AppRoutes() {
     { path: "thankyou", element: <ThanksPage /> },
     {
       path: "cms",
-      element: <CMSPage />,
+      element: (
+        <IfLogged elseNode={<Navigate to="/login" />}>
+          <CMSPage />
+        </IfLogged>
+      ),
       children: [
         { path: "orders", element: <CMSOrdersPage /> },
         { path: "products", element: <CMSProductsPage /> },
