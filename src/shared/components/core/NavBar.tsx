@@ -1,6 +1,13 @@
 import logo from "@assets/react.svg";
-import { NavLinkClassName, Product } from "@shared/models";
-import { useCartPanel } from "@shared/services";
+import { NavLinkClassName } from "@shared/models";
+import {
+  selectCartIsEmpty,
+  selectCartProductsQuantity,
+  selectOpen,
+  selectToggle,
+  useCart,
+  useCartPanel,
+} from "@shared/services";
 import { NavLink } from "react-router-dom";
 import { CartPanel } from "./CartPanel";
 
@@ -21,8 +28,10 @@ const isBottomButtonActive = ({ isActive }: NavLinkClassName) =>
   "btn accent lg" + (isActive ? " border-4 border-yellow-300" : "");
 
 export function NavBar() {
-  const isCartOpen: boolean = useCartPanel((state) => state.open);
-  const toggleCartPanel: () => void = useCartPanel((state) => state.toggle);
+  const isCartOpen: boolean = useCartPanel(selectOpen);
+  const toggleCartPanel: () => void = useCartPanel(selectToggle);
+  const cartProductsQuantity: number = useCart(selectCartProductsQuantity);
+  const isEmpty: boolean = useCart(selectCartIsEmpty);
 
   return (
     <div className="fixed top-0 left-0 right-0 shadow-2xl z-10">
@@ -38,25 +47,16 @@ export function NavBar() {
 
         {/* Cart */}
         <div>
-          <button className="btn accent lg" onClick={toggleCartPanel}>
-            Cart: 0
+          <button
+            className="btn accent lg"
+            disabled={isEmpty}
+            onClick={toggleCartPanel}
+          >
+            Cart: {cartProductsQuantity}
           </button>
         </div>
 
-        {isCartOpen && (
-          <CartPanel
-            productsOrderList={[
-              {
-                quantity: 4,
-                product: { id: "1", name: "Nutella", cost: 4 } as Product,
-              },
-              {
-                quantity: 5,
-                product: { id: "2", name: "Oreo", cost: 2 } as Product,
-              },
-            ]}
-          />
-        )}
+        {isCartOpen && <CartPanel />}
 
         {/* Bottom Bar */}
         <div className="fixed bottom-2 right-2 p-5">

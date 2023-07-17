@@ -1,30 +1,18 @@
-import { ProductsOrder } from "@shared/models";
-import { useCartPanel } from "@shared/services";
-import { useEffect, useState } from "react";
+import { CartItem } from "@shared/models";
+import {
+  selectCartList,
+  selectCloseOverlay,
+  selectTotalCartCost,
+  useCart,
+  useCartPanel,
+} from "@shared/services";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 
-interface ComponentProps {
-  productsOrderList?: ProductsOrder[];
-}
-
-export function CartPanel({ productsOrderList }: ComponentProps) {
-  const [totalPrice, setTotalPrice] = useState<number>();
+export function CartPanel() {
   const navigate: NavigateFunction = useNavigate();
-  const closeCartPanel: () => void = useCartPanel(
-    (state) => state.closeOverlay
-  );
-
-  useEffect(
-    () =>
-      setTotalPrice(
-        productsOrderList?.reduce(
-          (acc, { quantity, product: { cost } }: ProductsOrder) =>
-            acc + quantity * cost,
-          0
-        )
-      ),
-    [productsOrderList]
-  );
+  const cartItemList: CartItem[] = useCart(selectCartList);
+  const cartTotalCost: number = useCart(selectTotalCartCost);
+  const closeCartPanel: () => void = useCartPanel(selectCloseOverlay);
 
   function goToCart() {
     navigate("cart");
@@ -33,10 +21,10 @@ export function CartPanel({ productsOrderList }: ComponentProps) {
 
   return (
     <div className="fixed right-4 top-24 bg-slate-800 p-3 rounded-xl shadow-2xl w-96">
-      {productsOrderList && (
+      {cartItemList && (
         <ul className="flex flex-col gap-4">
-          {productsOrderList.map(
-            ({ quantity, product: { id, name, cost } }: ProductsOrder) => (
+          {cartItemList.map(
+            ({ qty, product: { id, name, cost } }: CartItem) => (
               <li
                 key={id}
                 className="flex justify-between items-center border-b border-slate-600 pb-3"
@@ -45,10 +33,10 @@ export function CartPanel({ productsOrderList }: ComponentProps) {
 
                 <div className="flex gap-3">
                   <div>
-                    ({quantity} x € {cost})
+                    ({qty} x € {cost})
                   </div>
 
-                  <div>€ {quantity * cost} </div>
+                  <div>€ {qty * cost}</div>
                 </div>
               </li>
             )
@@ -57,7 +45,7 @@ export function CartPanel({ productsOrderList }: ComponentProps) {
       )}
 
       <div className="flex justify-end text-xl font-bold my-3">
-        Total: {totalPrice}
+        Total: € {cartTotalCost}
       </div>
 
       <div className="flex justify-center">

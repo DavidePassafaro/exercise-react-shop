@@ -1,6 +1,6 @@
 import { ServerError, Spinner } from "@shared/components";
 import { Product } from "@shared/models";
-import { PB, useCartPanel } from "@shared/services";
+import { PB, useCart, useCartPanel } from "@shared/services";
 import { useEffect, useState } from "react";
 import { ProductCard } from "./components/ProductCard";
 
@@ -9,6 +9,9 @@ export function ShopPage() {
   const [pending, setPending] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const openCartPanel: () => void = useCartPanel((state) => state.openOverlay);
+  const addProductToCart: (product: Product) => void = useCart(
+    (state) => state.addToCart
+  );
 
   function loadData() {
     setError(false);
@@ -22,7 +25,7 @@ export function ShopPage() {
   }
 
   function addToCart(product: Product) {
-    console.log(product);
+    addProductToCart(product);
     openCartPanel();
   }
 

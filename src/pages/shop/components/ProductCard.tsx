@@ -14,16 +14,18 @@ export function ProductCard({
   return (
     <li
       key={id}
-      className="bg-white text-black rounded-xl shadow-2xl overflow-hidden"
+      className="flex flex-col bg-white text-black rounded-xl shadow-2xl overflow-hidden"
     >
-      {tmb && <img src={tmb} alt={name} className="h-64 w-full object-cover" />}
+      {tmb && (
+        <img src={tmb} alt={name} className="h-64 w-full object-contain" />
+      )}
 
       <div className="flex justify-between items-center p-3 text-xl font-bold">
         <h1>{name}</h1>
         <label>€ {cost}</label>
       </div>
 
-      {description && <p className="p-3">{description}</p>}
+      {description && <p className="flex-1 p-3">{description}</p>}
 
       <button
         className="bg-sky-600 text-white hover:bg-sky-800 transition w-full text-center p-3"

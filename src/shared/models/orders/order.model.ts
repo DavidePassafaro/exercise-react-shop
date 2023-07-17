@@ -1,18 +1,18 @@
-import { Product } from "..";
-import { PocketBaseBase } from "../pocketbase/pocketbase-base.model";
+import { CartItem } from "./cart-item.model";
+
+export interface OrderUser {
+  name: string;
+  email: string;
+}
 
 export enum OrderStatus {
   Pending = "pending",
   Done = "done",
 }
 
-export interface ProductsOrder {
-  quantity: number;
-  product: Product;
-}
-
-export interface Order extends PocketBaseBase {
-  user: any;
-  productsOrder: ProductsOrder[];
+export interface OrderForm {
+  user: OrderUser;
+  order: CartItem[];
   status: OrderStatus;
+  total: number;
 }
